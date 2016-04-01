@@ -8,11 +8,4 @@
 
 class Tile {
     
-    private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
-    
-    func tileAtColumn(column: Int, row: Int) -> Tile? {
-        assert(column >= 0 && column < NumColumns)
-        assert(row >= 0 && row < NumRows)
-        return tiles[column, row]
-    }
 }
