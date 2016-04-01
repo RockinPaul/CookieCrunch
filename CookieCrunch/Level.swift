@@ -29,7 +29,7 @@ class Level {
         
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
-                var cookieType = CookieType.random()
+                let cookieType = CookieType.random()
                 let cookie = Cookie(column: column, row: row, cookieType: cookieType)
                 cookies[column, row] = cookie
                 set.insert(cookie)
