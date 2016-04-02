@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Dictionary {
+extension Dictionary { // Расширение. Позволяет добавлять необходимые методы к существующим классам
     
     static func loadJSONFromBundle(filename: String) -> Dictionary<String, AnyObject>? {
         if let path = NSBundle.mainBundle().pathForResource(filename, ofType: "json") {

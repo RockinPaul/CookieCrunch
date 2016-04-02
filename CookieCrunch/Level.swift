@@ -18,8 +18,8 @@ class Level {
     
     init(filename: String) {
         
-        guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename),
-            let tilesArray: AnyObject = dictionary["tiles"] else {
+        guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename), // Загрузка из JSON
+              let tilesArray: AnyObject = dictionary["tiles"] else { // Получение списка активных элементов (0 или 1)
                 return
         }
         
@@ -27,23 +27,23 @@ class Level {
             let tileRow = NumRows - row - 1
             for (column, value) in rowArray.enumerate() {
                 if value == 1 {
-                    tiles[column, tileRow] = Tile()
+                    tiles[column, tileRow] = Tile() // Если элемент существует, создаем Tile
                 }
             }
         }
     }
     
-    func cookieAtColumn(column: Int, row: Int) -> Cookie? {
+    func cookieAtColumn(column: Int, row: Int) -> Cookie? { // Получение значения Cookie по координатам
         assert(column >= 0 && column < NumColumns)
         assert(row >= 0 && row < NumRows)
         return cookies[column, row]
     }
     
-    func shuffle() -> Set<Cookie> {
+    func shuffle() -> Set<Cookie> { // Создать игровое поле, перемешав элементы случайным образом
         return createInitialCookies()
     }
     
-    private func createInitialCookies() -> Set<Cookie> {
+    private func createInitialCookies() -> Set<Cookie> { // Инициализировать множество печенек
         var set = Set<Cookie>()
         
         for row in 0..<NumRows {
@@ -59,7 +59,7 @@ class Level {
         return set
     }
     
-    func tileAtColumn(column: Int, row: Int) -> Tile? {
+    func tileAtColumn(column: Int, row: Int) -> Tile? { // Возвращает Tile в соответсвующих координатах
         assert(column >= 0 && column < NumColumns)
         assert(row >= 0 && row < NumRows)
         return tiles[column, row]
