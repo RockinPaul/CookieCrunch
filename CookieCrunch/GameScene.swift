@@ -23,6 +23,8 @@ class GameScene: SKScene {
     var swipeFromColumn: Int? // Столбец и строка, которые пользователь нажимал
     var swipeFromRow: Int?    // сразу перед тем, как произвести свайп
     
+    var swipeHandler: ((Swap) -> ())?
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -82,12 +84,13 @@ class GameScene: SKScene {
         }
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) { // Пользователь нажал на игровое поле
         let touch = touches.first! as UITouch
         let location = touch.locationInNode(cookiesLayer)
-        let (success, column, row) = convertPoint(location)
+        let (success, column, row) = convertPoint(location) // Конвертация позиции элемента к
         if success {
             if let _ = level.cookieAtColumn(column, row: row) {
+                // Запоминаем стартовые значения индексов. От них выполняется свайп
                 swipeFromColumn = column
                 swipeFromRow = row
             }
@@ -128,18 +131,22 @@ class GameScene: SKScene {
         }
     }
     
-    func trySwapHorizontal(horzDelta: Int, vertical vertDelta: Int) {
+    func trySwapHorizontal(horzDelta: Int, vertical vertDelta: Int) { // Если возможно, выполняет свайп
         let toColumn = swipeFromColumn! + horzDelta
         let toRow = swipeFromRow! + vertDelta
-        if toColumn < 0 || toColumn >= NumColumns { return }
-        if toRow < 0 || toRow >= NumRows { return }
+        if toColumn < 0 || toColumn >= NumColumns { return } // Если свайп невозможно выполнить,
+        if toRow < 0 || toRow >= NumRows { return }          // из за границ игрового поля
         if let toCookie = level.cookieAtColumn(toColumn, row: toRow) {
             if let fromCookie = level.cookieAtColumn(swipeFromColumn!, row: swipeFromRow!) {
-                print("*** swapping \(fromCookie) with \(toCookie)")
+                if let handler = swipeHandler {
+                    let swap = Swap(cookieA: fromCookie, cookieB: toCookie)
+                    handler(swap)
+                }
             }
         }
     }
     
+    // По окончанию свайпа обнуляем значения стартовых координат
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         swipeFromColumn = nil
         swipeFromRow = nil
@@ -147,5 +154,24 @@ class GameScene: SKScene {
     
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         touchesEnded(touches!, withEvent: event)
+    }
+    
+    // Анимация замены элементов
+    func animateSwap(swap: Swap, completion: () -> ()) {
+        let spriteA = swap.cookieA.sprite!
+        let spriteB = swap.cookieB.sprite!
+        
+        spriteA.zPosition = 100
+        spriteB.zPosition = 90
+        
+        let Duration: NSTimeInterval = 0.3
+        
+        let moveA = SKAction.moveTo(spriteB.position, duration: Duration)
+        moveA.timingMode = .EaseOut
+        spriteA.runAction(moveA, completion: completion)
+        
+        let moveB = SKAction.moveTo(spriteA.position, duration: Duration)
+        moveB.timingMode = .EaseOut
+        spriteB.runAction(moveB)
     }
 }
