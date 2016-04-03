@@ -25,6 +25,8 @@ class GameScene: SKScene {
     
     var swipeHandler: ((Swap) -> ())?
     
+    var selectionSprite = SKSpriteNode()
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -89,10 +91,12 @@ class GameScene: SKScene {
         let location = touch.locationInNode(cookiesLayer)
         let (success, column, row) = convertPoint(location) // Конвертация позиции элемента к
         if success {
-            if let _ = level.cookieAtColumn(column, row: row) {
+            if let cookie = level.cookieAtColumn(column, row: row) {
                 // Запоминаем стартовые значения индексов. От них выполняется свайп
                 swipeFromColumn = column
                 swipeFromRow = row
+                
+                showSelectionIndicatorForCookie(cookie)
             }
         }
     }
@@ -127,6 +131,8 @@ class GameScene: SKScene {
             if horzDelta != 0 || vertDelta != 0 {
                 trySwapHorizontal(horzDelta, vertical: vertDelta)
                 swipeFromColumn = nil
+                
+                hideSelectionIndicator()
             }
         }
     }
@@ -148,6 +154,10 @@ class GameScene: SKScene {
     
     // По окончанию свайпа обнуляем значения стартовых координат
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        if selectionSprite.parent != nil && swipeFromColumn != nil {
+            hideSelectionIndicator()
+        }
         swipeFromColumn = nil
         swipeFromRow = nil
     }
@@ -173,5 +183,26 @@ class GameScene: SKScene {
         let moveB = SKAction.moveTo(spriteA.position, duration: Duration)
         moveB.timingMode = .EaseOut
         spriteB.runAction(moveB)
+    }
+    
+    func showSelectionIndicatorForCookie(cookie: Cookie) {
+        if selectionSprite.parent != nil {
+            selectionSprite.removeFromParent()
+        }
+        
+        if let sprite = cookie.sprite {
+            let texture = SKTexture(imageNamed: cookie.cookieType.highlightedSpriteName)
+            selectionSprite.size = texture.size()
+            selectionSprite.runAction(SKAction.setTexture(texture))
+            
+            sprite.addChild(selectionSprite)
+            selectionSprite.alpha = 1.0
+        }
+    }
+    
+    func hideSelectionIndicator() {
+        selectionSprite.runAction(SKAction.sequence([
+            SKAction.fadeOutWithDuration(0.3),
+            SKAction.removeFromParent()]))
     }
 }
