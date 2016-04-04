@@ -15,6 +15,7 @@ class Level {
 
     private var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
     private var tiles = Array2D<Tile>(columns: NumColumns, rows: NumRows)
+    private var possibleSwaps = Set<Swap>()
     
     init(filename: String) {
         
@@ -40,8 +41,81 @@ class Level {
     }
     
     func shuffle() -> Set<Cookie> { // Создать игровое поле, перемешав элементы случайным образом
-        return createInitialCookies()
+        var set: Set<Cookie>
+        repeat {
+            set = createInitialCookies()
+            detectPossibleSwaps()
+            print("possible swaps: \(possibleSwaps)")
+        } while possibleSwaps.count == 0
+        
+        return set
     }
+    
+    private func hasChainAtColumn(column: Int, row: Int) -> Bool {
+        let cookieType = cookies[column, row]!.cookieType
+        
+        var horzLength = 1
+        for var i = column - 1; i >= 0 && cookies[i, row]?.cookieType == cookieType;
+            --i, ++horzLength { }
+        for var i = column + 1; i < NumColumns && cookies[i, row]?.cookieType == cookieType;
+            ++i, ++horzLength { }
+        if horzLength >= 3 { return true }
+        
+        var vertLength = 1
+        for var i = row - 1; i >= 0 && cookies[column, i]?.cookieType == cookieType;
+            --i, ++vertLength { }
+        for var i = row + 1; i < NumRows && cookies[column, i]?.cookieType == cookieType;
+            ++i, ++vertLength { }
+        return vertLength >= 3
+    }
+    
+    func detectPossibleSwaps() {
+        var set = Set<Swap>()
+        
+        for row in 0..<NumRows {
+            for column in 0..<NumColumns {
+                if let cookie = cookies[column, row] {
+                    // Is it possible to swap this cookie with the one on the right?
+                    if column < NumColumns - 1 {
+                        // Have a cookie in this spot? If there is no tile, there is no cookie.
+                        if let other = cookies[column + 1, row] {
+                            // Swap them
+                            cookies[column, row] = other
+                            cookies[column + 1, row] = cookie
+                            
+                            // Is either cookie now part of a chain?
+                            if hasChainAtColumn(column + 1, row: row) ||
+                                hasChainAtColumn(column, row: row) {
+                                    set.insert(Swap(cookieA: cookie, cookieB: other))
+                            }
+                            // Swap them back
+                            cookies[column, row] = cookie
+                            cookies[column + 1, row] = other
+                        }
+                    }
+                    
+                    if row < NumRows - 1 {
+                        if let other = cookies[column, row + 1] {
+                            cookies[column, row] = other
+                            cookies[column, row + 1] = cookie
+                            
+                            // Is either cookie now part of a chain?
+                            if hasChainAtColumn(column, row: row + 1) ||
+                                hasChainAtColumn(column, row: row) {
+                                    set.insert(Swap(cookieA: cookie, cookieB: other))
+                            }
+                            
+                            // Swap them back
+                            cookies[column, row] = cookie
+                            cookies[column, row + 1] = other
+                        }
+                    }
+                }
+            }
+        }
+        possibleSwaps = set
+    }
+
     
     private func createInitialCookies() -> Set<Cookie> { // Инициализировать множество печенек
         var set = Set<Cookie>()
@@ -88,5 +162,9 @@ class Level {
         cookies[columnB, rowB] = swap.cookieA
         swap.cookieA.column = columnB
         swap.cookieA.row = rowB
+    }
+    
+    func isPossibleSwap(swap: Swap) -> Bool {
+        return possibleSwaps.contains(swap)
     }
 }
