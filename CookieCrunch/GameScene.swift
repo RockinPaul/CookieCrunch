@@ -27,6 +27,7 @@ class GameScene: SKScene {
     
     var selectionSprite = SKSpriteNode()
     
+    // Добавляем звуки
     let swapSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
     let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
     let matchSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)

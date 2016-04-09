@@ -31,6 +31,7 @@
 		E919E3EA1CB24F5C000A5B06 /* Ka-Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = E919E3E41CB24F5C000A5B06 /* Ka-Ching.wav */; };
 		E919E3EB1CB24F5C000A5B06 /* Mining by Moonlight.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E919E3E51CB24F5C000A5B06 /* Mining by Moonlight.mp3 */; };
 		E919E3EC1CB24F5C000A5B06 /* Scrape.wav in Resources */ = {isa = PBXBuildFile; fileRef = E919E3E61CB24F5C000A5B06 /* Scrape.wav */; };
+		E919E3EE1CB99402000A5B06 /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E919E3ED1CB99402000A5B06 /* Chain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		E919E3E41CB24F5C000A5B06 /* Ka-Ching.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Ka-Ching.wav"; sourceTree = "<group>"; };
 		E919E3E51CB24F5C000A5B06 /* Mining by Moonlight.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Mining by Moonlight.mp3"; sourceTree = "<group>"; };
 		E919E3E61CB24F5C000A5B06 /* Scrape.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Scrape.wav; sourceTree = "<group>"; };
+		E919E3ED1CB99402000A5B06 /* Chain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				E919E3DA1CAEE15A000A5B06 /* Tile.swift */,
 				E919E3DC1CAEE26A000A5B06 /* Extensions.swift */,
 				E919E3DE1CB151DD000A5B06 /* Swap.swift */,
+				E919E3ED1CB99402000A5B06 /* Chain.swift */,
 				E919E3B71CAC5B41000A5B06 /* GameViewController.swift */,
 				E919E3B91CAC5B41000A5B06 /* Main.storyboard */,
 				E919E3BC1CAC5B41000A5B06 /* Assets.xcassets */,
@@ -226,6 +229,7 @@
 				E919E3CA1CAD00A9000A5B06 /* Cookie.swift in Sources */,
 				E919E3DD1CAEE26A000A5B06 /* Extensions.swift in Sources */,
 				E919E3DB1CAEE15B000A5B06 /* Tile.swift in Sources */,
+				E919E3EE1CB99402000A5B06 /* Chain.swift in Sources */,
 				E919E3B81CAC5B41000A5B06 /* GameViewController.swift in Sources */,
 				E919E3B21CAC5B41000A5B06 /* AppDelegate.swift in Sources */,
 				E919E3CC1CAEC1D9000A5B06 /* Array2D.swift in Sources */,
