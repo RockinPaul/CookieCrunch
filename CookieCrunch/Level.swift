@@ -192,4 +192,97 @@ class Level {
         }
         return set
     }
-}
+    
+    private func detectVerticalMatches() -> Set<Chain> {
+        var set = Set<Chain>()
+        for column in 0..<NumColumns {
+            for var row = 0; row < NumRows - 2; {
+                if let cookie = cookies[column, row] {
+                    let matchType = cookie.cookieType
+                    
+                    if cookies[column, row + 1]?.cookieType == matchType &&
+                        cookies[column, row + 2]?.cookieType == matchType {
+                            
+                            let chain = Chain(chainType: .Vertical)
+                            repeat {
+                                chain.addCookie(cookies[column, row]!)
+                                ++row
+                            }
+                                while row < NumRows && cookies[column, row]?.cookieType == matchType
+                            
+                            set.insert(chain)
+                            continue
+                    }
+                }
+                ++row
+            }
+        }
+        return set
+    }
+    
+    func removeMatches() -> Set<Chain> {
+        let horizontalChains = detectHorizontalMatches()
+        let verticalChains = detectVerticalMatches()
+        
+        removeCookies(horizontalChains)
+        removeCookies(verticalChains)
+        
+        return horizontalChains.union(verticalChains)
+    }
+    
+    private func removeCookies(chains: Set<Chain>) {
+        for chain in chains {
+            for cookie in chain.cookies {
+                cookies[cookie.column, cookie.row] = nil
+            }
+        }
+    }
+    
+    func fillHoles() -> [[Cookie]] {
+        var columns = [[Cookie]]()
+        for column in 0..<NumColumns {
+            var array = [Cookie]()
+            for row in 0..<NumRows {
+                if tiles[column, row] != nil && cookies[column, row] == nil {
+                    for lookup in (row + 1)..<NumRows {
+                        if let cookie = cookies[column, lookup] {
+                            cookies[column, lookup] = nil
+                            cookies[column, row] = cookie
+                            cookie.row = row
+                            array.append(cookie)
+                            break
+                        }
+                    }
+                }
+            }
+            if !array.isEmpty {
+                columns.append(array)
+            }
+        }
+        return columns
+    }
+    
+    func topUpCookies() -> [[Cookie]] {
+        var columns = [[Cookie]]()
+        var cookieType: CookieType = .Unknown
+        
+        for column in 0..<NumColumns {
+            var array = [Cookie]()
+            for var row = NumRows - 1; row >= 0 && cookies[column, row] == nil; --row {
+                if tiles[column, row] != nil {
+                    var newCookieType: CookieType
+                    repeat {
+                        newCookieType = CookieType.random()
+                    } while newCookieType == cookieType
+                    cookieType = newCookieType
+                    let cookie = Cookie(column: column, row: row, cookieType: cookieType)
+                    cookies[column, row] = cookie
+                    array.append(cookie)
+                }
+            }
+            if !array.isEmpty {
+                columns.append(array)
+            }
+        }
+        return columns
+    }}
