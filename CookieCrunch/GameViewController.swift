@@ -8,6 +8,7 @@
 
 import UIKit
 import SpriteKit
+import AVFoundation
 
 class GameViewController: UIViewController {
     
@@ -24,6 +25,19 @@ class GameViewController: UIViewController {
     @IBOutlet weak var shuffleButton: UIButton!
     
     var tapGestureRecognizer: UITapGestureRecognizer!
+    
+    lazy var backgroundMusic: AVAudioPlayer = {
+        let url = NSBundle.mainBundle().URLForResource("Mining by Moonlight", withExtension: "mp3")
+        var player: AVAudioPlayer?
+        do {
+            player = try AVAudioPlayer(contentsOfURL: url!)
+            player!.numberOfLoops = -1
+        } catch {
+            NSLog("Unresolved error \(error)")
+            // SHOW ALERT OR SOMETHING
+        }
+        return player!
+    }() // The initialization code sits in a closure. It loads the background music MP3 and sets it to loop forever. Because the variable is marked lazy, the code from the closure won’t run until backgroundMusic is first accessed.
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -56,6 +70,8 @@ class GameViewController: UIViewController {
         scene.swipeHandler = handleSwipe
         // Present the scene.
         skView.presentScene(scene)
+        
+        backgroundMusic.play()
         
         beginGame()
         
