@@ -66,6 +66,20 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eKP-eH-3hV">
+                                <rect key="frame" x="110" y="512" width="100" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="20"/>
+                                <size key="titleShadowOffset" width="2.2250738585072014e-308" height="1"/>
+                                <state key="normal" title="Shuffle" backgroundImage="Button">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="shuffleButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="pdX-FD-fuG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -74,6 +88,7 @@
                         <outlet property="gameOverPanel" destination="gbk-fo-ZEC" id="sUM-iu-0WG"/>
                         <outlet property="movesLabel" destination="aRB-OR-AUH" id="8Ud-a9-T5g"/>
                         <outlet property="scoreLabel" destination="qx4-Jl-wj2" id="Y9I-o5-CNu"/>
+                        <outlet property="shuffleButton" destination="eKP-eH-3hV" id="Vqh-9G-p4R"/>
                         <outlet property="targetLabel" destination="4KB-bX-CfM" id="4ue-bK-SmA"/>
                     </connections>
                 </viewController>
@@ -82,4 +97,7 @@
             <point key="canvasLocation" x="229" y="274"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Button" width="100" height="36"/>
+    </resources>
 </document>
